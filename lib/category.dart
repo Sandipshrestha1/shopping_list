@@ -4,12 +4,7 @@ import 'package:shopping_list/models/categories.dart';
 const categories = {
   Categories.vegetables: Category(
     "vegetables",
-    Color.fromARGB(
-      255,
-      0,
-      255,
-      128,
-    ),
+    Color.fromARGB(255, 0, 255, 128),
   ),
   Categories.fruits: Category(
     "fruits",
