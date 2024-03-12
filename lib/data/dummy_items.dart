@@ -1,4 +1,4 @@
-import 'package:shopping_list/category.dart';
+import 'package:shopping_list/data/category.dart';
 import 'package:shopping_list/models/categories.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 
