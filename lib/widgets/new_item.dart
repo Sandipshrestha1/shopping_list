@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/data/category.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -27,21 +28,69 @@ class _NewItemState extends State<NewItem> {
                   label: Text("Name"),
                 ),
                 validator: (value) {
-                  return 'Hello Sandip';
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.trim().length <= 1 ||
+                      value.trim().length > 20) {
+                    return "Must be between 1 and 20 charater long";
+                  }
+                  return null;
                 },
               ),
+              const SizedBox(height: 7),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      label: Text("Quantity"),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        label: Text("Quantity"),
+                      ),
+                      initialValue: "1",
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            int.tryParse(value) == null ||
+                            int.tryParse(value)! <= 0) {
+                          return "Must be valid Positive numbers";
+                        }
+                        return null;
+                      },
                     ),
-                    initialValue: "1",
                   ),
                   const SizedBox(
                     width: 8,
                   ),
-                  DropdownButtonFormField(items: [], onChanged: onChanged)
+                  Expanded(
+                    child: DropdownButtonFormField(items: [
+                      for (final category in categories.entries)
+                        DropdownMenuItem(
+                          value: category.value,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 16, //
+                                height: 16,
+                                color: category.value.color,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(category.value.title),
+                            ],
+                          ),
+                        )
+                    ], onChanged: (value) {}),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(onPressed: () {}, child: const Text("Reset")),
+                  ElevatedButton(
+                      onPressed: () {}, child: const Text("Add Items"))
                 ],
               )
             ],
