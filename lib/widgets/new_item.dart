@@ -16,9 +16,37 @@ class _NewItemState extends State<NewItem> {
       appBar: AppBar(
         title: const Text("Add a new item"),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(12),
-        child: Text("The Form"),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text("Name"),
+                ),
+                validator: (value) {
+                  return 'Hello Sandip';
+                },
+              ),
+              Row(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      label: Text("Quantity"),
+                    ),
+                    initialValue: "1",
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  DropdownButtonFormField(items: [], onChanged: onChanged)
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
