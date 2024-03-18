@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -53,11 +53,14 @@ class _NewItemState extends State<NewItem> {
         return;
       }
 
-      Navigator.of(context).pop(GroceryItem(
+      Navigator.of(context).pop(
+        GroceryItem(
           id: DateTime.now().toString(),
           name: _enteredName,
           quantity: _enteredQuantity,
-          category: _selectedCategory));
+          category: _selectedCategory,
+        ),
+      );
 
       print(_enteredName);
       print(_enteredQuantity);

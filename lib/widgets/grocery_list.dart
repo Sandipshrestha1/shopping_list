@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/widgets/new_item.dart';
+import 'package:http/http.dart' as http;
 
 class GroceryList extends StatefulWidget {
   const GroceryList({super.key});
@@ -13,20 +16,39 @@ class GroceryList extends StatefulWidget {
 class _GroceryListState extends State<GroceryList> {
   final List<GroceryItem> _groceryItems = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadItems();
+  }
+
+  void _loadItems() async {
+    final url = Uri.https("flutter-project-ae7d1-default-rtdb.firebaseio.com",
+        "shopping-list.json");
+
+    final response = await http.get(url);
+
+    final listData = json.decode(response.body);
+
+    print(response.body);
+  }
+
   void _addItem() async {
-    final newItem = await Navigator.of(context).push<GroceryItem>(
+    //final newItem =
+    await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (ctx) => const NewItem(),
       ),
     );
-    if (newItem == null) {
-      //print(_groceryItems);
+    // if (newItem == null) {
+    //   //print(_groceryItems);
 
-      return;
-    }
-    setState(() {
-      _groceryItems.add(newItem);
-    });
+    //   return;
+    // }
+    // setState(() {
+    //   _groceryItems.add(newItem);
+    // });
+    _loadItems();
   }
 
   void _removeItem(GroceryItem item) {
