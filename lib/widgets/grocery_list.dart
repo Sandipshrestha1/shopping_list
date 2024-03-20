@@ -270,7 +270,7 @@ import 'package:shopping_list/widgets/new_item.dart';
 import 'package:http/http.dart' as http;
 
 class GroceryList extends StatefulWidget {
-  const GroceryList({Key? key}) : super(key: key);
+  const GroceryList({super.key});
 
   @override
   State<GroceryList> createState() => _GroceryListState();
@@ -278,8 +278,8 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> _groceryItems = [];
-  bool _isLoading = true; // Add _isLoading variable
-
+  var _isLoading = true; // Add _isLoading variable
+  String? _error;
   @override
   void initState() {
     super.initState();
@@ -294,6 +294,14 @@ class _GroceryListState extends State<GroceryList> {
 
     try {
       final response = await http.get(url);
+
+      if (response.statusCode >= 400) {
+        setState(() {
+          _error = "Failed to  fetch data. Please try again later";
+        });
+      }
+
+      print(response.statusCode);
 
       final Map<String, dynamic> listData = json.decode(response.body);
       final List<GroceryItem> loadedItems = [];
@@ -377,6 +385,12 @@ class _GroceryListState extends State<GroceryList> {
           ),
         );
       } else {}
+    }
+
+    if (_error != null) {
+      content = Center(
+        child: Text(_error!),
+      );
     }
 
     return Scaffold(
