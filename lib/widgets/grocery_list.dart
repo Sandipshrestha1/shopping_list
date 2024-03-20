@@ -262,6 +262,8 @@
 //   }
 // }
 
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/category.dart';
@@ -301,8 +303,14 @@ class _GroceryListState extends State<GroceryList> {
         });
       }
 
-      print(response.statusCode);
-
+      // print(response.body);
+//no down code are executed if isloading is false
+      if (response.body == 'null') {
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
       final Map<String, dynamic> listData = json.decode(response.body);
       final List<GroceryItem> loadedItems = [];
 
@@ -332,11 +340,14 @@ class _GroceryListState extends State<GroceryList> {
         _isLoading = false; // Update _isLoading when items are loaded
       });
 
-      // ignore: avoid_print
       print(response.body);
     } catch (error) {
       // Handle error
-      print('Error loading items: $error');
+
+      setState(() {
+        _error = "somethigs went wrong .";
+      });
+      // print('Error loading items: $error');
     }
   }
 
@@ -354,10 +365,22 @@ class _GroceryListState extends State<GroceryList> {
     }
   }
 
-  void _removeItem(GroceryItem item) {
+  void _removeItem(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
     setState(() {
       _groceryItems.remove(item);
     });
+    final url = Uri.https(
+      "flutter-project-ae7d1-default-rtdb.firebaseio.com",
+      "shopping-list/${item.id}.json",
+    );
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _groceryItems.insert(index, item);
+      });
+    }
   }
 
   @override
